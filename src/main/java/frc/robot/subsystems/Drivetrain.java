@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import frc.robot.Constants;
 
 public class Drivetrain extends SubsystemBase {
     WPI_TalonFX rightFront = new WPI_TalonFX(Constants.kDrivetrain.FRONT_RIGHT_ID);
@@ -19,6 +20,7 @@ public class Drivetrain extends SubsystemBase {
 
     DifferentialDrive diffDrive = new DifferentialDrive(leftFront, rightFront);
 
+    private int angleInvert;
     
     /** Creates a new ExampleSubsystem. */
     public Drivetrain() {
