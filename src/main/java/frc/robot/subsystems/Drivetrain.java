@@ -9,15 +9,49 @@ import com.ctre.phoenix.motorcontrol.Faults;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonFXInvertType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 public class Drivetrain extends SubsystemBase {
-    WPI_TalonFX rightFront = new WPI_TalonFX(1);
-    WPI_TalonFX rightBack = new WPI_TalonFX(10);
-    WPI_TalonFX leftFront = new WPI_TalonFX(2);
-    WPI_TalonFX leftBack = new WPI_TalonFX(20);
+    WPI_TalonFX rightFront = new WPI_TalonFX(Constants.kDrivetrain.FRONT_RIGHT_ID);
+    WPI_TalonFX rightBack = new WPI_TalonFX(Constants.kDrivetrain.BACK_RIGHT_ID);
+    WPI_TalonFX leftFront = new WPI_TalonFX(Constants.kDrivetrain.FRONT_LEFT_ID);
+    WPI_TalonFX leftBack = new WPI_TalonFX(Constants.kDrivetrain.BACK_LEFT_ID);
+
+    DifferentialDrive diffDrive = new DifferentialDrive(leftFront, rightFront);
+
     
     /** Creates a new ExampleSubsystem. */
-    public Drivetrain() {}
+    public Drivetrain() {
+        /* factory default values */
+        rightFront.configFactoryDefault();
+        rightBack.configFactoryDefault();
+        leftFront.configFactoryDefault();
+        leftBack.configFactoryDefault();
+
+        /* set up followers */
+        rightBack.follow(rightFront);
+        leftBack.follow(leftBack);
+
+        rightFront.setInverted(TalonFXInvertType.Clockwise);
+        leftFront.setInverted(TalonFXInvertType.Clockwise);
+        rightBack.setInverted(TalonFXInvertType.Clockwise);
+        leftBack.setInverted(TalonFXInvertType.Clockwise);
+
+        /*
+         * WPI drivetrain classes defaultly assume left and right are opposite. call
+         * this so we can apply + to both sides when moving forward. DO NOT CHANGE
+         */
+        diffDrive.setRightSideInverted(false);
+    }
+
+
+
+    public void curveDrive(double linearVelocity, double angularVelocity, boolean isQuickturn) {
+        if (isQuickturn) {
+          angularVelocity /= 2;
+        }
+        diffDrive.curvatureDrive(linearVelocity, angularVelocity * angleInvert, isQuickturn);
+    }
 
     @Override
     public void periodic() {
