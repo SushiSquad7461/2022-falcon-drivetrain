@@ -32,11 +32,11 @@ public class Drivetrain extends SubsystemBase {
 
         /* set up followers */
         rightBack.follow(rightFront);
-        leftBack.follow(leftBack);
+        leftBack.follow(leftFront);
 
-        rightFront.setInverted(TalonFXInvertType.Clockwise);
+        rightFront.setInverted(TalonFXInvertType.CounterClockwise);
         leftFront.setInverted(TalonFXInvertType.Clockwise);
-        rightBack.setInverted(TalonFXInvertType.Clockwise);
+        rightBack.setInverted(TalonFXInvertType.CounterClockwise);
         leftBack.setInverted(TalonFXInvertType.Clockwise);
 
         /*
