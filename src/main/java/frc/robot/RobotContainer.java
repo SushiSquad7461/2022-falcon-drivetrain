@@ -33,6 +33,10 @@ public class RobotContainer {
     configureButtonBindings();
   }
 
+  public Drivetrain getDrive() {
+    return drivetrain;
+  }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be created by
    * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -40,8 +44,20 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    
     drivetrain.setDefaultCommand(new RunCommand(() -> drivetrain.curveDrive(OI.getTriggers(driveController),
     OI.getLeftStick(driveController), driveController.getXButton()), drivetrain));
+
+    new JoystickButton(driveController, XboxController.Button.kA.value)
+      .whenPressed(new RunCommand(drivetrain::runHopper, drivetrain))
+      .whenReleased(new RunCommand(drivetrain::stopHopper, drivetrain));
+    /*
+    new JoystickButton(driveController, XboxController.Button.kA.value)
+      .whenPressed(new RunCommand(() -> drivetrain.runFalcon(1), drivetrain))
+      .whenReleased(new RunCommand(() -> drivetrain.runFalcon(0),drivetrain));
+    new JoystickButton(driveController, XboxController.Button.kB.value)
+      .whenPressed(new RunCommand(() -> drivetrain.runFalcon(-1), drivetrain))
+      .whenReleased(new RunCommand(() -> drivetrain.runFalcon(0),drivetrain)); */
   }
 
   /**
